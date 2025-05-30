@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- 손바닥 -->
+  <path d="M32 320h416v40c0 61-49 110-110 110H142c-61 0-110-49-110-110v-40z" fill="skyblue"></path>
+  <!-- 지붕 -->
+  <polygon points="256,80 32,256 96,256 96,384 416,384 416,256 480,256" fill="skyblue"></polygon>
+  <!-- 집 몸통 -->
+  <rect x="160" y="256" width="192" height="160" fill="skyblue"></rect>
+  <!-- 창문 -->
+  <rect x="224" y="304" width="64" height="64" fill="#ffffff"></rect>
+</svg>
