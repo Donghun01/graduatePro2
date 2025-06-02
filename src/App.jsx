@@ -2,30 +2,30 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import MapPage from "./pages/MapPage";
 import Home from "./pages/Home";
-import SearchPage from "./pages/SearchPage";
 import AboutPage from "./pages/AboutPage";
+import SearchPage from "./pages/SearchPage";
+import MapPage from "./pages/MapPage";
 import ListingPage from "./pages/ListingPage";
-import "./index.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import ListingDetailPage from "./pages/ListingDetailPage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <div
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
+      <div className="flex flex-col min-h-screen">
         <Navbar />
 
-        <main style={{ flex: 1 }}>
+        <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/search" element={<SearchPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/results" element={<MapPage />} />
             <Route path="/list/:neighborhood" element={<ListingPage />} />
+            <Route
+              path="/list/:neighborhood/:idx"
+              element={<ListingDetailPage />}
+            />
           </Routes>
         </main>
 

@@ -79,12 +79,7 @@ const MapView = ({
   return (
     <div
       ref={mapContainerRef}
-      style={{
-        width: "100%",
-        height: "600px",
-        borderRadius: "8px",
-        overflow: "hidden",
-      }}
+      className="w-[90%] h-[700px] rounded-lg overflow-hidden"
     />
   );
 };

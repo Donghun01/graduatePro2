@@ -1,16 +1,4 @@
 /* src/index.css */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  /* 가로 스크롤이 절대 못 나오게 하려면 주석 해제 */
-  /* overflow-x: hidden; */
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

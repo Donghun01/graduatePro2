@@ -4,76 +4,43 @@ import icon from "../assets/icon.png";
 
 const Navbar = () => {
   return (
-    <nav style={styles.navbar}>
-      <div style={styles.logo}>
-        <img
-          src={icon}
-          alt="real estate"
-          style={{
-            width: "32px",
-            height: "32px",
-            verticalAlign: "middle",
-            marginRight: "0.75rem",
-          }}
-        />
-        <span style={styles.logoText}>이사하자</span>
-      </div>
-      <ul style={styles.navLinks}>
+    <nav className="w-full bg-white flex justify-between items-center px-10 py-5 border-b border-gray-200 shadow-sm">
+      <Link to="/" className="flex items-center">
+        <img src={icon} alt="real estate" className="w-8 h-8 mr-3" />
+        <span className="font-bold text-xl text-gray-800 tracking-wide">
+          이사하자
+        </span>
+      </Link>
+      <ul className="flex space-x-8">
         <li>
-          <Link to="/" style={styles.link}>
+          <Link
+            to="/"
+            className="text-gray-800 font-medium text-lg hover:text-[#00AEEF] transition-colors"
+          >
             Home
           </Link>
         </li>
         <li>
-          <Link to="/about" style={styles.link}>
+          <Link
+            to="/about"
+            className="text-gray-800 font-medium text-lg hover:text-[#00AEEF] transition-colors"
+          >
             About
           </Link>
         </li>
         <li>
-          <Link to="/contact" style={styles.link}>
+          <a
+            href="https://www.hs.ac.kr/IT/index.do"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-800 font-medium text-lg hover:text-[#00AEEF] transition-colors"
+          >
             Contact
-          </Link>
+          </a>
         </li>
       </ul>
     </nav>
   );
-};
-
-const styles = {
-  navbar: {
-    width: "100%",
-    backgroundColor: "#fff",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "1.2rem 2.5rem",
-    borderBottom: "1px solid #e5e5e5",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
-  },
-  logo: {
-    display: "flex",
-    alignItems: "center",
-  },
-  logoText: {
-    fontWeight: 700,
-    fontSize: "1.5rem",
-    color: "#222",
-    letterSpacing: "0.02em",
-  },
-  navLinks: {
-    listStyle: "none",
-    display: "flex",
-    gap: "2rem",
-    margin: 0,
-    padding: 0,
-  },
-  link: {
-    textDecoration: "none",
-    color: "#333",
-    fontWeight: 500,
-    fontSize: "1.1rem",
-    transition: "color 0.2s",
-  },
 };
 
 export default Navbar;

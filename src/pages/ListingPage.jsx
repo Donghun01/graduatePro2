@@ -1,146 +1,134 @@
 // src/pages/ListingPage.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { sampleListings } from "../data/sampleListings";
 
-const listingsData = {
-  강남: [
-    {
-      title: "강남 A 오피스텔",
-      imageUrl: "/images/강남A.jpg",
-      safetyScore: "9/10",
-      transportScore: "200m",
-      description:
-        "편리한 쇼핑몰과 가까워서 편리합니다. 도보 5분 거리 지하철역과 연결되어 전철로 어디든 이동 가능해요.",
-    },
-    {
-      title: "강남 B 오피스텔",
-      imageUrl: "/images/강남B.jpg",
-      safetyScore: "7/10",
-      transportScore: "300m",
-      description:
-        "한적한 주택가 골목이라 조용합니다. 지하철역까지 도보 3분 거리로 접근성 좋음.",
-    },
-    {
-      title: "강남 C 오피스텔",
-      imageUrl: "/images/강남C.jpg",
-      safetyScore: "8/10",
-      transportScore: "150m",
-      description:
-        "고층 빌딩 숲 사이에 위치해 조망이 좋습니다. 주변에 편의점, 카페, 맛집 다수 위치.",
-    },
-  ],
-  홍대: [
-    {
-      title: "홍대 A 원룸",
-      imageUrl: "/images/홍대A.jpg",
-      safetyScore: "8/10",
-      transportScore: "250m",
-      description:
-        "감성 카페 골목과 가까워 트렌디한 분위기를 느낄 수 있어요. 홍대입구역까지 도보 5분.",
-    },
-    {
-      title: "홍대 B 투룸",
-      imageUrl: "/images/홍대B.jpg",
-      safetyScore: "6/10",
-      transportScore: "400m",
-      description:
-        "번화가 중심부보다 약간 떨어져서 조용합니다. 그래도 밤문화 즐기기 좋음.",
-    },
-    {
-      title: "홍대 C 오피스텔",
-      imageUrl: "/images/홍대C.jpg",
-      safetyScore: "7/10",
-      transportScore: "300m",
-      description:
-        "인근에 공연장과 클럽이 많아 문화생활이 편리합니다. 이태원으로도 이동하기 수월해요.",
-    },
-  ],
-  이태원: [
-    {
-      title: "이태원 A 하우스",
-      imageUrl: "/images/이태원A.jpg",
-      safetyScore: "7/10",
-      transportScore: "300m",
-      description:
-        "외국인 관광객이 많아 외국 식당과 다국적 푸드를 쉽게 즐길 수 있어요. 지하철 이태원역 3분 거리.",
-    },
-    {
-      title: "이태원 B 스튜디오",
-      imageUrl: "/images/이태원B.jpg",
-      safetyScore: "6/10",
-      transportScore: "250m",
-      description:
-        "힙한 분위기의 브랜드 카페가 도보 2분 거리. 해밀턴 호텔 바로 옆이라 안심됩니다.",
-    },
-    {
-      title: "이태원 C 원룸",
-      imageUrl: "/images/이태원C.jpg",
-      safetyScore: "8/10",
-      transportScore: "350m",
-      description:
-        "밤에는 조명이 예쁜 골목이 많아서 야경이 멋져요. 외국 생활을 체험하기 좋습니다.",
-    },
-  ],
-};
+const ITEMS_PER_PAGE = 4;
 
 const ListingPage = () => {
   const { neighborhood } = useParams();
-  const items = listingsData[neighborhood] || [];
+  const items = sampleListings[neighborhood] || [];
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = items.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+  const goToPage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div className="p-8 bg-gray-50 min-h-screen">
       <Link
         to="/results"
-        style={{
-          textDecoration: "none",
-          color: "#555",
-          marginBottom: "1rem",
-          display: "inline-block",
-        }}
+        className="inline-flex items-center text-[#00AEEF] hover:text-[#008bb5] font-medium mb-6"
       >
-        ← 돌아가기
+        <span className="mr-2 text-2xl">←</span>
+        <span className="text-lg">돌아가기</span>
       </Link>
-      <h2>📌 {neighborhood} 지역 매물</h2>
+
+      <h2 className="text-3xl font-bold text-gray-800 mb-8">
+        📌 {neighborhood} 지역 매물
+      </h2>
+
       {items.length === 0 ? (
-        <p>
-          죄송해요, 현재 <strong>{neighborhood}</strong> 지역의 매물 정보를 찾을
-          수 없습니다.
+        <p className="text-center text-gray-600">
+          죄송해요, 현재{" "}
+          <strong className="text-gray-800">{neighborhood}</strong> 지역의 매물
+          정보를 찾을 수 없습니다.
         </p>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.5rem",
-            marginTop: "1rem",
-          }}
-        >
-          {items.map((item, idx) => (
-            <div
-              key={idx}
-              style={{
-                display: "flex",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                overflow: "hidden",
-              }}
-            >
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                style={{ width: "200px", height: "150px", objectFit: "cover" }}
-              />
-              <div style={{ padding: "1rem", flex: 1 }}>
-                <h3 style={{ margin: 0 }}>{item.title}</h3>
-                <p style={{ margin: "0.5rem 0" }}>{item.description}</p>
-                <ul style={{ paddingLeft: "1.2rem", margin: 0 }}>
-                  <li>치안 점수: {item.safetyScore}</li>
-                  <li>교통 거리: {item.transportScore}</li>
-                </ul>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {currentItems.map((item, idx) => (
+              <div
+                key={startIdx + idx}
+                className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-shadow duration-200 flex flex-col md:flex-row"
+              >
+                <div className="h-48 md:h-auto md:w-48 flex-shrink-0">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 flex-1 mb-4 line-clamp-3">
+                    {item.description}
+                  </p>
+                  <ul className="flex flex-wrap gap-6 text-gray-700 text-sm mb-4">
+                    <li className="flex items-center space-x-2">
+                      <span className="inline-block w-2 h-2 bg-[#00AEEF] rounded-full" />
+                      <span>치안 점수: {item.safetyScore}</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="inline-block w-2 h-2 bg-[#00AEEF] rounded-full" />
+                      <span>교통 거리: {item.transportScore}</span>
+                    </li>
+                  </ul>
+                  <Link
+                    to={`/list/${encodeURIComponent(neighborhood)}/${
+                      startIdx + idx
+                    }`}
+                    className="mt-auto inline-block self-start px-4 py-2 bg-[#00AEEF] text-white rounded-lg text-sm font-medium hover:bg-[#008bb5] transition-colors"
+                  >
+                    상세보기
+                  </Link>
+                </div>
               </div>
+            ))}
+          </div>
+
+          {/* 페이지네이션 */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-10 space-x-2">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-[#00AEEF] text-white hover:bg-[#008bb5]"
+                }`}
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => goToPage(page)}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      page === currentPage
+                        ? "bg-[#00AEEF] text-white shadow-lg"
+                        : "bg-white text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-[#00AEEF] text-white hover:bg-[#008bb5]"
+                }`}
+              >
+                Next
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );

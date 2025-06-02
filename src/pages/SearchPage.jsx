@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const SearchPage = () => {
   const navigate = useNavigate();
-  const [crime, setCrime] = useState(5);
-  const [rent, setRent] = useState(5);
-  const [facility, setFacility] = useState(5);
+  const [crime, setCrime] = useState(0);
+  const [rent, setRent] = useState(0);
+  const [facility, setFacility] = useState(0);
   const [address, setAddress] = useState("");
 
   const handleSubmit = (e) => {
@@ -14,142 +14,82 @@ const SearchPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      {/* 1️⃣ 필터 슬라이더 섹션 */}
-      <section style={styles.filterBox}>
-        <h2 style={styles.filterTitle}>중요도를 선택하세요</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-[800px] mt-12 mx-auto flex flex-col gap-10 px-4"
+    >
+      <section className="bg-white shadow-lg rounded-xl p-8">
+        <h2 className="mb-6 text-2xl font-bold text-gray-800">
+          중요도를 선택하세요
+        </h2>
 
-        <div style={styles.row}>
-          <label style={styles.label}>범죄율:</label>
+        <div className="flex items-center mb-5">
+          <label className="w-28 font-semibold text-gray-700">범죄율:</label>
           <input
             type="range"
             min={0}
             max={10}
             value={crime}
             onChange={(e) => setCrime(+e.target.value)}
-            style={styles.slider}
+            className="flex-1 accent-[#00AEEF] h-2"
           />
-          <span style={styles.value}>{crime}</span>
+          <span className="ml-6 w-10 text-center font-medium text-gray-800">
+            {crime}
+          </span>
         </div>
 
-        <div style={styles.row}>
-          <label style={styles.label}>월세:</label>
+        <div className="flex items-center mb-5">
+          <label className="w-28 font-semibold text-gray-700">월세:</label>
           <input
             type="range"
             min={0}
             max={10}
             value={rent}
             onChange={(e) => setRent(+e.target.value)}
-            style={styles.slider}
+            className="flex-1 accent-[#00AEEF] h-2"
           />
-          <span style={styles.value}>{rent}</span>
+          <span className="ml-6 w-10 text-center font-medium text-gray-800">
+            {rent}
+          </span>
         </div>
 
-        <div style={styles.row}>
-          <label style={styles.label}>편의시설:</label>
+        <div className="flex items-center">
+          <label className="w-28 font-semibold text-gray-700">편의시설:</label>
           <input
             type="range"
             min={0}
             max={10}
             value={facility}
             onChange={(e) => setFacility(+e.target.value)}
-            style={styles.slider}
+            className="flex-1 accent-[#00AEEF] h-2"
           />
-          <span style={styles.value}>{facility}</span>
+          <span className="ml-6 w-10 text-center font-medium text-gray-800">
+            {facility}
+          </span>
         </div>
       </section>
 
-      {/* 2️⃣ 주소 입력 섹션 */}
-      <section style={styles.addressBox}>
-        <h3 style={styles.addressTitle}>나의 공간</h3>
-        <label style={styles.labelInline}>주소 입력:</label>
+      <section className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
+        <h3 className="w-full md:w-auto text-lg font-semibold text-gray-800">
+          자주 가는 장소
+        </h3>
         <input
           type="text"
           placeholder="예) 서울시 강남구 역삼동"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          style={styles.addressInput}
+          className="flex-1 py-3 px-5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00AEEF]"
         />
       </section>
 
-      {/* 3️⃣ 제출 버튼 */}
-      <button type="submit" style={styles.submitBtn}>
-        Submit
+      <button
+        type="submit"
+        className="self-end py-3 px-10 bg-[#00AEEF] text-white rounded-full text-lg font-semibold hover:bg-[#008bb5] transition-colors shadow-md"
+      >
+        제출하기
       </button>
     </form>
   );
-};
-
-const styles = {
-  form: {
-    maxWidth: "800px",
-    margin: "2rem auto",
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-  },
-  filterBox: {
-    backgroundColor: "#d7efff",
-    padding: "1.5rem",
-    borderRadius: "8px",
-  },
-  filterTitle: {
-    margin: 0,
-    marginBottom: "1rem",
-    fontSize: "1.25rem",
-    fontWeight: "600",
-  },
-  row: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "0.75rem",
-  },
-  label: {
-    width: "6rem",
-    fontWeight: "500",
-  },
-  slider: {
-    flex: 1,
-    accentColor: "#00AEEF",
-  },
-  value: {
-    marginLeft: "1rem",
-    minWidth: "2rem",
-    textAlign: "center",
-    fontWeight: "500",
-  },
-  addressBox: {
-    padding: "1rem",
-    border: "1px solid #e0e0e0",
-    borderRadius: "8px",
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-  },
-  addressTitle: {
-    margin: 0,
-    fontSize: "1rem",
-    fontWeight: "500",
-  },
-  labelInline: {
-    minWidth: "4rem",
-  },
-  addressInput: {
-    flex: 1,
-    padding: "0.5rem 1rem",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-  },
-  submitBtn: {
-    alignSelf: "flex-end",
-    padding: "0.75rem 2rem",
-    backgroundColor: "#00AEEF",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "1rem",
-  },
 };
 
 export default SearchPage;

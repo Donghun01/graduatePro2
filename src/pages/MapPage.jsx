@@ -1,96 +1,97 @@
-// src/pages/MapPage.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import MapView from "../components/MapView";
+import MapSection from "../components/MapSection";
+import ListSection from "../components/ListSection";
+import { sampleMarkers } from "../data/sampleMarkers";
 
-const sampleData = [
-  {
-    name: "강남",
-    lat: 37.4979,
-    lng: 127.0276,
-    rent: "80만",
-    transport: "매우 우수",
-    safety: "우수",
-    description: "화려한 아강 쇼핑몰...",
-  },
-  {
-    name: "홍대",
-    lat: 37.5572,
-    lng: 126.9246,
-    rent: "65만",
-    transport: "우수",
-    safety: "보통",
-    description: "감성 카페와...",
-  },
-  {
-    name: "이태원",
-    lat: 37.5343,
-    lng: 126.9949,
-    rent: "75만",
-    transport: "우수",
-    safety: "보통",
-    description: "다양성 중시...",
-  },
-];
+const ITEMS_PER_PAGE = 3;
 
 const MapPage = () => {
-  const [markers] = useState(sampleData);
-  // 항상 첫 번째 마커(강남) 위치를 센터로 사용
-  const defaultCenter = [markers[0].lat, markers[0].lng];
+  const [markers] = useState(sampleMarkers);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 전체 페이지 수
+  const totalPages = Math.ceil(markers.length / ITEMS_PER_PAGE);
+
+  // 현재 페이지에 보여줄 ITEMS_PER_PAGE개 아이템 구하기
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const currentItems = markers.slice(startIdx, endIdx);
+
+  // 페이지 전환 함수
+  const goToPage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  // 현재 페이지 첫 번째 아이템을 기준으로 지도 center 값 설정
+  const defaultCenter = currentItems.length
+    ? [currentItems[0].lat, currentItems[0].lng]
+    : [37.5665, 126.978]; // 비어 있을 경우 서울시청 좌표
   const defaultZoom = 9;
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>추천 동네 결과</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: "2rem",
-          alignItems: "start",
-        }}
-      >
-        {/* 지도 컴포넌트 */}
-        <MapView center={defaultCenter} zoom={defaultZoom} markers={markers} />
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+        추천 동네 결과
+      </h2>
 
-        <div>
-          {markers.map((item, idx) => (
-            <Link
-              key={idx}
-              to={`/list/${encodeURIComponent(item.name)}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div
-                style={{
-                  marginBottom: "1.5rem",
-                  padding: "1rem",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  transition: "box-shadow 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <h3>
-                  {idx + 1}. {item.name}
-                </h3>
-                <p style={{ margin: "0.5rem 0" }}>
-                  {item.description.slice(0, 30)}...
-                </p>
-                <ul style={{ paddingLeft: "1.2rem", margin: 0 }}>
-                  <li>평균 월세: {item.rent}</li>
-                  <li>교통: {item.transport}</li>
-                  <li>치안: {item.safety}</li>
-                </ul>
-              </div>
-            </Link>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+        {/* 좌측: 지도 섹션 (현재 페이지 마커만 넘김) */}
+        <MapSection
+          center={defaultCenter}
+          zoom={defaultZoom}
+          markers={currentItems}
+        />
+
+        {/* 우측: 리스트 섹션 (현재 페이지 아이템만 넘김) */}
+        <ListSection items={currentItems} startIdx={startIdx} />
       </div>
+
+      {/* 하단 페이지네이션 */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-10 space-x-2">
+          {/* Prev 버튼 */}
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              currentPage === 1
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-[#00AEEF] text-white hover:bg-[#008bb5]"
+            }`}
+          >
+            Prev
+          </button>
+
+          {/* 페이지 번호 버튼 */}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => goToPage(page)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                page === currentPage
+                  ? "bg-[#00AEEF] text-white shadow-lg"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* Next 버튼 */}
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              currentPage === totalPages
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-[#00AEEF] text-white hover:bg-[#008bb5]"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
