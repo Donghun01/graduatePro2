@@ -6,8 +6,8 @@ import MapPage from "./pages/MapPage";
 import Home from "./pages/Home";
 import SearchPage from "./pages/SearchPage";
 import AboutPage from "./pages/AboutPage";
+import ListingPage from "./pages/ListingPage";
 import "./index.css";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -25,6 +25,7 @@ const App = () => {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/results" element={<MapPage />} />
+            <Route path="/list/:neighborhood" element={<ListingPage />} />
           </Routes>
         </main>
 

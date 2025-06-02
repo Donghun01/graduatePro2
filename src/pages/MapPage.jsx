@@ -1,7 +1,7 @@
 // src/pages/MapPage.jsx
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import MapView from "../components/MapView";
-import Results from "../components/Results";
 
 const sampleData = [
   {
@@ -34,22 +34,14 @@ const sampleData = [
 ];
 
 const MapPage = () => {
-  // ① markers 상태로 샘플 데이터를 관리
   const [markers] = useState(sampleData);
-
-  // ② 초기 지도 중심(center)을 첫 번째 마커 위치(강남)로 설정
-  //    만약 markers가 비어 있으면 기본값 [37.5665, 126.978] (서울시청) 사용
-  const defaultCenter = markers.length
-    ? [markers[0].lat, markers[0].lng]
-    : [37.5665, 126.978];
-
-  // ③ 초기 줌 레벨 (1~14). 숫자가 작을수록 확대(closer)되어 보입니다.
-  const defaultZoom = 4;
+  // 항상 첫 번째 마커(강남) 위치를 센터로 사용
+  const defaultCenter = [markers[0].lat, markers[0].lng];
+  const defaultZoom = 9;
 
   return (
     <div style={{ padding: "2rem" }}>
       <h2>추천 동네 결과</h2>
-
       <div
         style={{
           display: "grid",
@@ -58,12 +50,46 @@ const MapPage = () => {
           alignItems: "start",
         }}
       >
-        {/* ④ MapView에 center, zoom, markers를 모두 넘겨줍니다. */}
+        {/* 지도 컴포넌트 */}
         <MapView center={defaultCenter} zoom={defaultZoom} markers={markers} />
 
-        {/* ⑤ 오른쪽 컬럼에는 Results 컴포넌트를 렌더링 */}
-        {/*    Results 컴포넌트는 items prop으로 sampleData(=markers) 배열을 받도록 가정 */}
-        <Results items={markers} />
+        <div>
+          {markers.map((item, idx) => (
+            <Link
+              key={idx}
+              to={`/list/${encodeURIComponent(item.name)}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div
+                style={{
+                  marginBottom: "1.5rem",
+                  padding: "1rem",
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  transition: "box-shadow 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <h3>
+                  {idx + 1}. {item.name}
+                </h3>
+                <p style={{ margin: "0.5rem 0" }}>
+                  {item.description.slice(0, 30)}...
+                </p>
+                <ul style={{ paddingLeft: "1.2rem", margin: 0 }}>
+                  <li>평균 월세: {item.rent}</li>
+                  <li>교통: {item.transport}</li>
+                  <li>치안: {item.safety}</li>
+                </ul>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
