@@ -79,7 +79,7 @@ const MapView = ({
   return (
     <div
       ref={mapContainerRef}
-      className="w-[90%] h-[700px] rounded-lg overflow-hidden"
+      className="w-[100%] h-[700px] rounded-lg overflow-hidden"
     />
   );
 };

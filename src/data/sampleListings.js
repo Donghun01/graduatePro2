@@ -1,10 +1,21 @@
-// src/data/sampleListings.js
+import room1 from "../assets/image/room/room1.jpg";
+import room2 from "../assets/image/room/room2.jpg";
+import room3 from "../assets/image/room/room3.jpg";
+import room4 from "../assets/image/room/room4.jpg";
+import room5 from "../assets/image/room/room5.jpg";
+import room6 from "../assets/image/room/room6.jpg";
+import room7 from "../assets/image/room/room7.jpg";
+import room8 from "../assets/image/room/room8.jpg";
+import room9 from "../assets/image/room/room9.jpg";
+import room10 from "../assets/image/room/room10.jpg";
+import room11 from "../assets/image/room/room11.jpg";
+import room12 from "../assets/image/room/room12.jpg";
 
 export const sampleListings = {
   강남: [
     {
       title: "강남 A 오피스텔",
-      imageUrl: "/images/강남A.jpg",
+      imageUrl: room4,
       safetyScore: "9/10",
       transportScore: "200m",
       description:
@@ -12,7 +23,7 @@ export const sampleListings = {
     },
     {
       title: "강남 B 오피스텔",
-      imageUrl: "/images/강남B.jpg",
+      imageUrl: room5,
       safetyScore: "7/10",
       transportScore: "300m",
       description:
@@ -20,7 +31,7 @@ export const sampleListings = {
     },
     {
       title: "강남 C 오피스텔",
-      imageUrl: "/images/강남C.jpg",
+      imageUrl: room3,
       safetyScore: "8/10",
       transportScore: "150m",
       description:
@@ -28,7 +39,7 @@ export const sampleListings = {
     },
     {
       title: "강남 D 원룸",
-      imageUrl: "/images/강남D.jpg",
+      imageUrl: room8,
       safetyScore: "9/10",
       transportScore: "180m",
       description:
@@ -36,7 +47,7 @@ export const sampleListings = {
     },
     {
       title: "강남 E 투룸",
-      imageUrl: "/images/강남E.jpg",
+      imageUrl: room2,
       safetyScore: "8/10",
       transportScore: "220m",
       description:
@@ -44,7 +55,7 @@ export const sampleListings = {
     },
     {
       title: "강남 F 오피스텔",
-      imageUrl: "/images/강남F.jpg",
+      imageUrl: room6,
       safetyScore: "7/10",
       transportScore: "250m",
       description:
@@ -52,7 +63,7 @@ export const sampleListings = {
     },
     {
       title: "강남 G 스튜디오",
-      imageUrl: "/images/강남G.jpg",
+      imageUrl: room7,
       safetyScore: "6/10",
       transportScore: "130m",
       description:
@@ -60,7 +71,7 @@ export const sampleListings = {
     },
     {
       title: "강남 H 하우스",
-      imageUrl: "/images/강남H.jpg",
+      imageUrl: room1,
       safetyScore: "9/10",
       transportScore: "300m",
       description:
@@ -68,7 +79,7 @@ export const sampleListings = {
     },
     {
       title: "강남 I 펜트하우스",
-      imageUrl: "/images/강남I.jpg",
+      imageUrl: room9,
       safetyScore: "10/10",
       transportScore: "100m",
       description:
@@ -78,7 +89,7 @@ export const sampleListings = {
   홍대: [
     {
       title: "홍대 A 원룸",
-      imageUrl: "/images/홍대A.jpg",
+      imageUrl: room10,
       safetyScore: "8/10",
       transportScore: "250m",
       description:
@@ -86,7 +97,7 @@ export const sampleListings = {
     },
     {
       title: "홍대 B 투룸",
-      imageUrl: "/images/홍대B.jpg",
+      imageUrl: room11,
       safetyScore: "6/10",
       transportScore: "400m",
       description:
@@ -94,7 +105,7 @@ export const sampleListings = {
     },
     {
       title: "홍대 C 오피스텔",
-      imageUrl: "/images/홍대C.jpg",
+      imageUrl: room12,
       safetyScore: "7/10",
       transportScore: "300m",
       description:

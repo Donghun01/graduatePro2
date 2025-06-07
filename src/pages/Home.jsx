@@ -20,11 +20,11 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center py-16 px-6 bg-gray-50">
-      <h1 className="mb-6 text-center text-3xl font-extrabold text-gray-800">
+      <h1 className="mb-7 text-center text-4xl font-extrabold text-gray-800">
         {message}
       </h1>
 
-      <p className="text-center max-w-2xl mb-12 text-gray-600 leading-relaxed">
+      <p className="text-center max-w-2xl mb-1 text-gray-800 leading-relaxed">
         치안, 임대료, 거리, 편의시설 등{" "}
         <span className="text-[#00AEEF] font-semibold">다양한 조건</span>을
         바탕으로
@@ -34,24 +34,14 @@ const Home = () => {
       </p>
 
       <div className="flex flex-wrap justify-center gap-8 w-full max-w-4xl">
-        <div className="w-full md:w-1/2 bg-white rounded-xl shadow-lg overflow-hidden">
-          <h2 className="px-6 pt-6 text-xl font-semibold text-gray-700">
-            추천 주택 보기
-          </h2>
+        <div className="mt-12 w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden h-96 md:h-[600px]">
           <HouseCarousel />
-        </div>
-
-        <div className="w-full md:w-1/2 bg-white rounded-xl shadow-lg overflow-hidden">
-          <h2 className="px-6 pt-6 text-xl font-semibold text-gray-700">
-            광고
-          </h2>
-          <AdCarousel />
         </div>
       </div>
 
       <button
         onClick={handleStart}
-        className="mt-10 px-8 py-3 bg-[#00AEEF] text-white rounded-xl text-lg font-medium hover:bg-[#008bb5] transition-colors"
+        className="mt-10 px-8 py-3 px-10 bg-[#00AEEF] text-white rounded-full text-lg font-semibold hover:bg-[#008bb5] transition-colors shadow-md"
       >
         시작하기
       </button>

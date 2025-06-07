@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
-import adimg1 from "../assets/image/ad1.png";
-import adimg2 from "../assets/image/ad2.png";
+import adimg1 from "../assets/image/ad/ad1.png";
+import adimg2 from "../assets/image/ad/ad2.png";
 
 const adImages = [adimg1, adimg2];
 
