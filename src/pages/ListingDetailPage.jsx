@@ -1,19 +1,53 @@
 // src/pages/ListingDetailPage.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { sampleListings } from "../data/sampleListings";
+// import { sampleListings } from "../data/sampleListings"; // 이 줄은 이제 필요 없습니다.
 
 const ListingDetailPage = () => {
   const { neighborhood, idx } = useParams();
   const navigate = useNavigate();
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // idx는 문자열이므로 정수로 변환
-  const index = parseInt(idx, 10);
-  const items = sampleListings[neighborhood] || [];
-  const item = items[index];
+  useEffect(() => {
+    const fetchListingDetail = async () => {
+      try {
+        setLoading(true);
+        // Mock API의 listings 객체 전체를 가져옵니다.
+        const response = await fetch(`http://localhost:3001/listings`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
 
-  // 매물 데이터가 없을 때 (존재하지 않는 인덱스이거나 neighborhood 키가 없는 경우)
-  if (!item) {
+        // 가져온 데이터에서 neighborhood에 해당하는 배열을 찾은 후,
+        // URL의 idx(id)와 일치하는 항목을 찾습니다.
+        const listingsInNeighborhood = data[neighborhood] || [];
+        const listing = listingsInNeighborhood.find(
+          (listing) => String(listing.id) === String(idx)
+        );
+
+        setItem(listing);
+      } catch (err) {
+        setError("매물 정보를 가져오는 데 실패했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchListingDetail();
+  }, [neighborhood, idx]);
+
+  if (loading) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-xl text-gray-600">로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (error || !item) {
     return (
       <div className="p-8 bg-gray-50 min-h-screen flex flex-col items-center justify-center">
         <p className="text-xl text-gray-600 mb-4">존재하지 않는 매물입니다.</p>

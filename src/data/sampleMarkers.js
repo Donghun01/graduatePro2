@@ -1,5 +1,3 @@
-// src/data/sampleMarkers.js
-
 export const sampleMarkers = [
   {
     name: "강남",

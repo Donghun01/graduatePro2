@@ -1,14 +1,36 @@
-// src/pages/MapPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MapSection from "../components/MapSection";
 import ListSection from "../components/ListSection";
-import { sampleMarkers } from "../data/sampleMarkers";
+// import { sampleMarkers } from "../data/sampleMarkers"; // 이 줄을 제거했습니다.
 
 const ITEMS_PER_PAGE = 3;
 
 const MapPage = () => {
-  const [markers] = useState(sampleMarkers);
+  const [markers, setMarkers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchMarkers = async () => {
+      try {
+        setLoading(true);
+        // Mock API 엔드포인트로 변경
+        const response = await fetch("http://localhost:3001/markers");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setMarkers(data);
+      } catch (err) {
+        setError("마커 데이터를 가져오는 데 실패했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMarkers();
+  }, []);
 
   const totalPages = Math.ceil(markers.length / ITEMS_PER_PAGE);
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -24,6 +46,22 @@ const MapPage = () => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
+
+  if (loading) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-xl text-gray-600">로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-xl text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">

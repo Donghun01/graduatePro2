@@ -1,14 +1,39 @@
 // src/pages/ListingPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { sampleListings } from "../data/sampleListings";
+// import { sampleListings } from "../data/sampleListings"; // 이 줄은 이제 필요 없습니다.
 
 const ITEMS_PER_PAGE = 4;
 
 const ListingPage = () => {
   const { neighborhood } = useParams();
-  const items = sampleListings[neighborhood] || [];
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        setLoading(true);
+        // Mock API의 listings 객체 전체를 가져옵니다.
+        const response = await fetch(`http://localhost:3001/listings`);
+        if (!response.ok) {
+          throw new Error("네트워크 응답이 올바르지 않습니다.");
+        }
+        const data = await response.json();
+
+        // 가져온 데이터에서 neighborhood에 해당하는 배열을 찾습니다.
+        setItems(data[neighborhood] || []);
+      } catch (err) {
+        setError("매물 정보를 가져오는 데 실패했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchListings();
+  }, [neighborhood]);
 
   const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -18,6 +43,22 @@ const ListingPage = () => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
+
+  if (loading) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-xl text-gray-600">로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-xl text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -42,9 +83,9 @@ const ListingPage = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {currentItems.map((item, idx) => (
+            {currentItems.map((item) => (
               <div
-                key={startIdx + idx}
+                key={item.id}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-shadow duration-200 flex flex-col md:flex-row"
               >
                 <div className="h-48 md:h-auto md:w-48 flex-shrink-0">
@@ -72,9 +113,7 @@ const ListingPage = () => {
                     </li>
                   </ul>
                   <Link
-                    to={`/list/${encodeURIComponent(neighborhood)}/${
-                      startIdx + idx
-                    }`}
+                    to={`/list/${encodeURIComponent(neighborhood)}/${item.id}`}
                     className="mt-auto inline-block self-start px-4 py-2 bg-[#00AEEF] text-white rounded-lg text-sm font-medium hover:bg-[#008bb5] transition-colors"
                   >
                     상세보기
