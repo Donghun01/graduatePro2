@@ -5,7 +5,6 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AboutPage from "./pages/AboutPage";
 import SearchPage from "./pages/SearchPage";
-import MapPage from "./pages/MapPage";
 import ListingPage from "./pages/ListingPage";
 import ListingDetailPage from "./pages/ListingDetailPage";
 
@@ -20,7 +19,6 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route path="/results" element={<MapPage />} />
             <Route path="/list/:neighborhood" element={<ListingPage />} />
             <Route
               path="/list/:neighborhood/:idx"
