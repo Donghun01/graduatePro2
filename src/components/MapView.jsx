@@ -1,18 +1,20 @@
 // src/components/MapView.jsx
 import React, { useEffect, useRef } from "react";
-import icon from "../assets/icon.png"; // 마커 이미지 경로
+import icon from "../assets/icon.png";
+import userLocationIcon from "../assets/user-location.png";
 
-const { kakao } = window; // 전역에 로드된 kakao 네임스페이스를 가져옵니다.
+const { kakao } = window;
 
 const MapView = ({
-  center = [37.5665, 126.978], // [lat, lng]
-  zoom = 4, // 카카오 지도 레벨 (1~14, 숫자가 작을수록 확대)
-  markers = [], // [{ name, lat, lng, rent, transport, safety, description }, …]
+  center = [37.5665, 126.978],
+  zoom = 4,
+  markers = [],
+  userAddressMarker = null,
+  onMarkerClick, // onMarkerClick props 추가
 }) => {
-  const mapContainerRef = useRef(null); // 지도가 그려질 div를 참조할 ref
-  const kakaoMapRef = useRef(null); // kakao.maps.Map 인스턴스를 저장
+  const mapContainerRef = useRef(null);
+  const kakaoMapRef = useRef(null);
 
-  // 1) map 생성 및 center/zoom 변경을 한 곳에서 처리
   useEffect(() => {
     kakao.maps.load(() => {
       if (!mapContainerRef.current) return;
@@ -30,46 +32,23 @@ const MapView = ({
     });
   }, [center, zoom]);
 
-  // 2) markers 배열이 바뀔 때마다 “이전 마커 제거 → 새로 그리기”
   useEffect(() => {
     const map = kakaoMapRef.current;
     if (!map) return;
 
-    // (2-1) 이전에 찍어 둔 마커들 전부 제거
     if (map._markerList) {
       map._markerList.forEach((m) => m.setMap(null));
     }
     map._markerList = [];
 
-    // (2-2) markers 배열을 순회하며 마커 생성
+    // 기존 마커들 생성
     markers.forEach((m) => {
-      // 2-2-1) 안전 점수에 따라 다른 마커 이미지를 설정합니다.
-      let markerImageSrc;
-      switch (m.safety) {
-        case "매우 우수":
-          markerImageSrc = icon; // 예시: 매우 우수
-          break;
-        case "우수":
-          markerImageSrc = icon; // 예시: 우수
-          break;
-        case "보통":
-          markerImageSrc = icon; // 예시: 보통
-          break;
-        default:
-          markerImageSrc = icon; // 기본값
-          break;
-      }
-
-      const imageSize = new kakao.maps.Size(40, 45); // 마커 이미지 크기
-      const markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize);
-
-      // 2-2-2) 좌표 객체 생성
+      const imageSize = new kakao.maps.Size(40, 45);
+      const markerImage = new kakao.maps.MarkerImage(icon, imageSize);
       const position = new kakao.maps.LatLng(m.lat, m.lng);
-      // 2-2-3) 마커 생성 및 지도에 붙이기
       const marker = new kakao.maps.Marker({ position, image: markerImage });
       marker.setMap(map);
 
-      // 2-2-4) 인포윈도우(팝업) 내용 구성
       const infoContent = `
         <div class="bg-white p-4 rounded-lg shadow-md max-w-xs">
           <strong class="text-lg font-bold block mb-1 text-gray-800">${m.name}</strong>
@@ -80,27 +59,57 @@ const MapView = ({
           </ul>
           <p class="mt-2 text-xs text-gray-500 line-clamp-2">${m.description}</p>
         </div>`;
-
       const infowindow = new kakao.maps.InfoWindow({
         content: infoContent,
         removable: true,
       });
 
-      // 마커 클릭 시 인포윈도우 표시
       kakao.maps.event.addListener(marker, "click", () => {
-        // 모든 인포윈도우 닫기
         map._markerList.forEach((m) => m._infowindow.close());
         infowindow.open(map, marker);
-        console.log("Clicked marker:", m); // 콘솔에 마커 정보 출력
+        // 마커 클릭 시 onMarkerClick 함수 실행
+        if (onMarkerClick) {
+          onMarkerClick(m);
+        }
       });
-
-      // 마커 객체에 인포윈도우 저장
       marker._infowindow = infowindow;
-
-      // 2-2-5) map._markerList에 marker 저장 (나중에 지우기 위해)
       map._markerList.push(marker);
     });
-  }, [markers]);
+
+    // 사용자가 입력한 주소의 마커 생성 (다른 색상으로)
+    if (userAddressMarker) {
+      const position = new kakao.maps.LatLng(
+        userAddressMarker.lat,
+        userAddressMarker.lng
+      );
+      const imageSize = new kakao.maps.Size(40, 45);
+      const markerImage = new kakao.maps.MarkerImage(
+        userLocationIcon,
+        imageSize
+      );
+      const userMarker = new kakao.maps.Marker({
+        position,
+        image: markerImage,
+      });
+      userMarker.setMap(map);
+
+      const infoContent = `
+        <div class="bg-white p-4 rounded-lg shadow-md max-w-xs">
+          <strong class="text-lg font-bold block mb-1 text-gray-800">내가 찾는 지역</strong>
+          <p class="mt-2 text-sm text-gray-600">${userAddressMarker.name}</p>
+        </div>`;
+      const infowindow = new kakao.maps.InfoWindow({
+        content: infoContent,
+        removable: true,
+      });
+      kakao.maps.event.addListener(userMarker, "click", () => {
+        map._markerList.forEach((m) => m._infowindow.close());
+        infowindow.open(map, userMarker);
+      });
+      userMarker._infowindow = infowindow;
+      map._markerList.push(userMarker);
+    }
+  }, [markers, userAddressMarker, onMarkerClick]); // onMarkerClick을 의존성 배열에 추가
 
   return (
     <div

@@ -1,7 +1,7 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SearchProvider } from "./contexts/SearchContext"; // 추가
+import { SearchProvider } from "./contexts/SearchContext"; // SearchProvider 추가
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -17,9 +17,8 @@ const App = () => {
         <Navbar />
 
         <main className="flex-1">
+          {/* Routes를 SearchProvider로 감싸서 모든 자식 컴포넌트가 상태에 접근할 수 있게 합니다. */}
           <SearchProvider>
-            {" "}
-            {/* 추가 */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
@@ -30,8 +29,7 @@ const App = () => {
                 element={<ListingDetailPage />}
               />
             </Routes>
-          </SearchProvider>{" "}
-          {/* 추가 */}
+          </SearchProvider>
         </main>
 
         <Footer />

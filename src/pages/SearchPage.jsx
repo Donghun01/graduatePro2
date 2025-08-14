@@ -1,13 +1,12 @@
 // src/pages/SearchPage.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import MapSection from "../components/MapSection";
 import ListSection from "../components/ListSection";
-import { useSearch } from "../contexts/SearchContext"; // 추가
+import { useSearch } from "../contexts/SearchContext";
+import { useNavigate } from "react-router-dom"; // useNavigate import 추가
 
 const SearchPage = () => {
-  const navigate = useNavigate();
-  // Context에서 상태와 함수를 가져옵니다.
+  const navigate = useNavigate(); // useNavigate 훅 사용
   const {
     crime,
     setCrime,
@@ -20,24 +19,25 @@ const SearchPage = () => {
     searchResults,
     handleSearch,
     showResults,
+    isLoading,
     currentPage,
     goToPage,
     totalPages,
     ITEMS_PER_PAGE,
+    defaultCenter,
+    userAddressMarker,
   } = useSearch();
 
-  // defaultCenter와 defaultZoom 계산 로직을 유지
+  const handleMarkerClick = (marker) => {
+    navigate(`/list/${marker.name}`); // 마커 클릭 시 해당 지역의 세부 페이지로 이동
+  };
+
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = searchResults.slice(startIdx, startIdx + ITEMS_PER_PAGE);
-
-  const defaultCenter = currentItems.length
-    ? [currentItems[0].lat, currentItems[0].lng]
-    : [37.5665, 126.978];
   const defaultZoom = 9;
 
   return (
     <div className="flex flex-col items-center py-16 px-6 bg-gray-50">
-      {/* 폼 제출 핸들러를 handleSearch로 변경 */}
       <form
         onSubmit={handleSearch}
         className="max-w-6xl mt-12 mx-auto flex flex-col gap-10 px-4 w-full"
@@ -122,7 +122,11 @@ const SearchPage = () => {
             추천 동네 결과
           </h2>
 
-          {searchResults.length === 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-48">
+              <p className="text-xl text-gray-600">검색 중...</p>
+            </div>
+          ) : searchResults.length === 0 ? (
             <p className="text-center text-gray-600">
               죄송해요, 조건에 맞는 지역을 찾을 수 없습니다.
             </p>
@@ -133,6 +137,8 @@ const SearchPage = () => {
                   center={defaultCenter}
                   zoom={defaultZoom}
                   markers={currentItems}
+                  userAddressMarker={userAddressMarker}
+                  onMarkerClick={handleMarkerClick} // onMarkerClick props 추가
                 />
               </div>
               <div className="col-span-1">
@@ -141,7 +147,7 @@ const SearchPage = () => {
             </div>
           )}
 
-          {totalPages > 1 && (
+          {totalPages > 1 && !isLoading && searchResults.length > 0 && (
             <div className="flex justify-center items-center mt-10 space-x-2">
               <button
                 onClick={() => goToPage(currentPage - 1)}
