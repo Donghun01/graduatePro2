@@ -1,7 +1,6 @@
 // src/pages/ListingPage.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-// import { sampleListings } from "../data/sampleListings"; // 이 줄은 이제 필요 없습니다.
 
 const ITEMS_PER_PAGE = 4;
 
@@ -16,14 +15,12 @@ const ListingPage = () => {
     const fetchListings = async () => {
       try {
         setLoading(true);
-        // Mock API의 listings 객체 전체를 가져옵니다.
         const response = await fetch(`http://localhost:3001/listings`);
         if (!response.ok) {
           throw new Error("네트워크 응답이 올바르지 않습니다.");
         }
         const data = await response.json();
 
-        // 가져온 데이터에서 neighborhood에 해당하는 배열을 찾습니다.
         setItems(data[neighborhood] || []);
       } catch (err) {
         setError("매물 정보를 가져오는 데 실패했습니다.");

@@ -1,68 +1,45 @@
-import React, { useState } from "react";
+// src/pages/SearchPage.jsx
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import MapSection from "../components/MapSection";
 import ListSection from "../components/ListSection";
-import jsonData from "../../db.json";
-
-const ITEMS_PER_PAGE = 3;
+import { useSearch } from "../contexts/SearchContext"; // 추가
 
 const SearchPage = () => {
   const navigate = useNavigate();
+  // Context에서 상태와 함수를 가져옵니다.
+  const {
+    crime,
+    setCrime,
+    rent,
+    setRent,
+    facility,
+    setFacility,
+    address,
+    setAddress,
+    searchResults,
+    handleSearch,
+    showResults,
+    currentPage,
+    goToPage,
+    totalPages,
+    ITEMS_PER_PAGE,
+  } = useSearch();
 
-  const [crime, setCrime] = useState(0);
-  const [rent, setRent] = useState(0);
-  const [facility, setFacility] = useState(0);
-  const [address, setAddress] = useState("");
-
-  const [searchResults, setSearchResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showResults, setShowResults] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setShowResults(true);
-
-    const filteredMarkers = jsonData.markers.filter((marker) => {
-      const markerRent = parseInt(marker.rent.replace("만", ""));
-      const isRentMatch = rent === 0 || markerRent <= rent * 10;
-
-      const markerSafetyText = marker.safety;
-      const markerSafetyScore =
-        markerSafetyText === "매우 우수"
-          ? 10
-          : markerSafetyText === "우수"
-          ? 7
-          : 4;
-      const isSafetyMatch = crime === 0 || markerSafetyScore >= crime;
-
-      const isAddressMatch = address === "" || marker.name.includes(address);
-
-      return isRentMatch && isSafetyMatch && isAddressMatch;
-    });
-
-    setSearchResults(filteredMarkers);
-    setCurrentPage(1);
-  };
-
-  const totalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE);
+  // defaultCenter와 defaultZoom 계산 로직을 유지
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = searchResults.slice(startIdx, startIdx + ITEMS_PER_PAGE);
 
-  // defaultCenter 배열의 첫 번째 요소가 객체가 아니므로, 아래와 같이 수정
   const defaultCenter = currentItems.length
     ? [currentItems[0].lat, currentItems[0].lng]
     : [37.5665, 126.978];
   const defaultZoom = 9;
 
-  const goToPage = (page) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
   return (
     <div className="flex flex-col items-center py-16 px-6 bg-gray-50">
+      {/* 폼 제출 핸들러를 handleSearch로 변경 */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSearch}
         className="max-w-6xl mt-12 mx-auto flex flex-col gap-10 px-4 w-full"
       >
         <section className="bg-white shadow-lg rounded-xl p-8">
