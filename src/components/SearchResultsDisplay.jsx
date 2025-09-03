@@ -1,6 +1,6 @@
 // src/components/SearchResultsDisplay.jsx
 import React from "react";
-import MapSection from "./MapSection";
+import MapSection from "./map/MapSection";
 import ListSection from "./ListSection";
 import { useSearch } from "../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";

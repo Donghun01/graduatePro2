@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HouseCarousel from "../components/HouseCarousel";
-import AdCarousel from "../components/AdCarousel";
 
 const Home = () => {
   const navigate = useNavigate();
