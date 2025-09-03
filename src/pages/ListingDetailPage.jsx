@@ -63,38 +63,58 @@ const ListingDetailPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen py-8 px-4">
-      <Link
-        to={`/list/${encodeURIComponent(neighborhood)}`}
-        className="inline-flex items-center text-[#00AEEF] hover:text-[#008bb5] font-medium mb-6"
-      >
-        <span className="mr-2 text-2xl">←</span>
-        <span className="text-lg">뒤로 가기</span>
-      </Link>
+      <div className="max-w-5xl mx-auto">
+        <Link
+          to={`/list/${encodeURIComponent(neighborhood)}`}
+          className="inline-flex items-center text-[#00AEEF] hover:text-[#008bb5] font-medium mb-6"
+        >
+          <span className="mr-2 text-2xl">←</span>
+          <span className="text-lg">{neighborhood} 목록으로</span>
+        </Link>
 
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="w-full h-80 md:h-96 overflow-hidden">
-          <img
-            src={item.imageUrl}
-            alt={item.title}
-            className="w-full h-full object-cover"
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Gallery */}
+          <div className="lg:col-span-2 bg-white rounded-2xl shadow-md overflow-hidden">
+            <div className="w-full aspect-[16/9] bg-gray-100">
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Summary card */}
+          <div className="bg-white rounded-2xl shadow-md p-6 h-max">
+            <h1 className="text-2xl font-extrabold text-gray-900">
+              {item.title}
+            </h1>
+            <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-xl border border-gray-100 p-3">
+                <div className="text-xs text-gray-500">치안</div>
+                <div className="mt-1 text-lg font-semibold">
+                  {item.safetyScore}
+                </div>
+              </div>
+              <div className="rounded-xl border border-gray-100 p-3">
+                <div className="text-xs text-gray-500">교통</div>
+                <div className="mt-1 text-lg font-semibold">
+                  {item.transportScore}
+                </div>
+              </div>
+            </div>
+            <button className="mt-5 w-full px-5 py-3 bg-[#00AEEF] text-white rounded-xl font-semibold hover:bg-[#008bb5] transition-colors">
+              문의하기
+            </button>
+          </div>
         </div>
 
-        <div className="p-6 space-y-6">
-          <h2 className="text-3xl font-bold text-gray-800">{item.title}</h2>
-
-          <p className="text-gray-700 leading-relaxed">{item.description}</p>
-
-          <ul className="space-y-3 text-gray-700 text-sm">
-            <li className="flex items-center space-x-2">
-              <span className="inline-block w-3 h-3 bg-[#00AEEF] rounded-full" />
-              <span>치안 점수: {item.safetyScore}</span>
-            </li>
-            <li className="flex items-center space-x-2">
-              <span className="inline-block w-3 h-3 bg-[#00AEEF] rounded-full" />
-              <span>교통 거리: {item.transportScore}</span>
-            </li>
-          </ul>
+        {/* Description */}
+        <div className="mt-8 bg-white rounded-2xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-900">상세 설명</h2>
+          <p className="mt-3 text-gray-700 leading-relaxed">
+            {item.description}
+          </p>
         </div>
       </div>
     </div>

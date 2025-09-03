@@ -1,11 +1,12 @@
 // src/pages/ListingPage.jsx
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 4;
 
 const ListingPage = () => {
   const { neighborhood } = useParams();
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,17 +60,20 @@ const ListingPage = () => {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      <Link
-        to="/results"
+      <button
+        onClick={() => navigate("/search")}
         className="inline-flex items-center text-[#00AEEF] hover:text-[#008bb5] font-medium mb-6"
       >
         <span className="mr-2 text-2xl">←</span>
         <span className="text-lg">돌아가기</span>
-      </Link>
+      </button>
 
-      <h2 className="text-3xl font-bold text-gray-800 mb-8">
-        📌 {neighborhood} 지역 매물
+      <h2 className="text-3xl font-extrabold text-gray-900 mb-3">
+        {neighborhood} 지역 매물
       </h2>
+      <p className="text-gray-600 mb-8">
+        추천된 매물들을 한눈에 비교해 보세요.
+      </p>
 
       {items.length === 0 ? (
         <p className="text-center text-gray-600">
@@ -81,42 +85,46 @@ const ListingPage = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {currentItems.map((item) => (
-              <div
+              <Link
                 key={item.id}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-shadow duration-200 flex flex-col md:flex-row"
+                to={`/list/${encodeURIComponent(neighborhood)}/${item.id}`}
+                className="group block bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all overflow-hidden"
               >
-                <div className="h-48 md:h-auto md:w-48 flex-shrink-0">
+                <div className="relative">
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full aspect-video object-cover"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+                    <h3 className="text-white text-xl font-semibold drop-shadow">
+                      {item.title}
+                    </h3>
+                    <div className="hidden group-hover:flex gap-2">
+                      <span className="px-2 py-1 text-xs rounded-md bg-white/90 text-gray-800">
+                        치안 {item.safetyScore}
+                      </span>
+                      <span className="px-2 py-1 text-xs rounded-md bg-white/90 text-gray-800">
+                        교통 {item.transportScore}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-2xl font-semibold text-gray-800 mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 flex-1 mb-4 line-clamp-3">
+                <div className="p-5">
+                  <p className="text-gray-600 line-clamp-2 min-h-[44px]">
                     {item.description}
                   </p>
-                  <ul className="flex flex-wrap gap-6 text-gray-700 text-sm mb-4">
-                    <li className="flex items-center space-x-2">
-                      <span className="inline-block w-2 h-2 bg-[#00AEEF] rounded-full" />
-                      <span>치안 점수: {item.safetyScore}</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <span className="inline-block w-2 h-2 bg-[#00AEEF] rounded-full" />
-                      <span>교통 거리: {item.transportScore}</span>
-                    </li>
-                  </ul>
-                  <Link
-                    to={`/list/${encodeURIComponent(neighborhood)}/${item.id}`}
-                    className="mt-auto inline-block self-start px-4 py-2 bg-[#00AEEF] text-white rounded-lg text-sm font-medium hover:bg-[#008bb5] transition-colors"
-                  >
-                    상세보기
-                  </Link>
+                  <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#E6F7FD] text-[#007da0]">
+                      안전 {item.safetyScore}
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                      교통 {item.transportScore}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

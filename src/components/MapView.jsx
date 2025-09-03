@@ -1,7 +1,5 @@
 // src/components/MapView.jsx
 import React, { useEffect, useRef } from "react";
-import icon from "../assets/icon.png";
-import userLocationIcon from "../assets/user-location.png";
 
 const { kakao } = window;
 
@@ -36,17 +34,22 @@ const MapView = ({
     const map = kakaoMapRef.current;
     if (!map) return;
 
+    // 기존 마커 정리
     if (map._markerList) {
       map._markerList.forEach((m) => m.setMap(null));
     }
     map._markerList = [];
 
-    // 기존 마커들 생성
+    // 기존 오버레이 정리
+    if (map._overlayList) {
+      map._overlayList.forEach((o) => o.setMap(null));
+    }
+    map._overlayList = [];
+
+    // 기존 마커들 생성 (기본 마커 사용)
     markers.forEach((m) => {
-      const imageSize = new kakao.maps.Size(40, 45);
-      const markerImage = new kakao.maps.MarkerImage(icon, imageSize);
       const position = new kakao.maps.LatLng(m.lat, m.lng);
-      const marker = new kakao.maps.Marker({ position, image: markerImage });
+      const marker = new kakao.maps.Marker({ position });
       marker.setMap(map);
 
       const infoContent = `
@@ -76,21 +79,13 @@ const MapView = ({
       map._markerList.push(marker);
     });
 
-    // 사용자가 입력한 주소의 마커 생성 (다른 색상으로)
+    // 사용자가 입력한 주소의 마커 생성 (기본 마커 + 파란 점 오버레이로 강조)
     if (userAddressMarker) {
       const position = new kakao.maps.LatLng(
         userAddressMarker.lat,
         userAddressMarker.lng
       );
-      const imageSize = new kakao.maps.Size(40, 45);
-      const markerImage = new kakao.maps.MarkerImage(
-        userLocationIcon,
-        imageSize
-      );
-      const userMarker = new kakao.maps.Marker({
-        position,
-        image: markerImage,
-      });
+      const userMarker = new kakao.maps.Marker({ position });
       userMarker.setMap(map);
 
       const infoContent = `
@@ -107,7 +102,18 @@ const MapView = ({
         infowindow.open(map, userMarker);
       });
       userMarker._infowindow = infowindow;
+
+      // 파란 점 오버레이로 시각적 강조 (기본 마커 위에 표시)
+      const overlay = new kakao.maps.CustomOverlay({
+        position,
+        yAnchor: 1.2,
+        content:
+          '<div style="width:12px;height:12px;background:#00AEEF;border:2px solid #ffffff;border-radius:9999px;box-shadow:0 0 0 4px rgba(0,174,239,0.25);"></div>',
+      });
+      overlay.setMap(map);
+
       map._markerList.push(userMarker);
+      map._overlayList.push(overlay);
     }
   }, [markers, userAddressMarker, onMarkerClick]); // onMarkerClick을 의존성 배열에 추가
 
