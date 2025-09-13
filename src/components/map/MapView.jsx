@@ -56,11 +56,14 @@ const MapView = ({
         <div class="bg-white p-4 rounded-lg shadow-md max-w-xs">
           <strong class="text-lg font-bold block mb-1 text-gray-800">${m.name}</strong>
           <ul class="text-sm text-gray-600 space-y-1">
-            <li><span class="font-semibold text-blue-500">월세:</span> ${m.rent}</li>
-            <li><span class="font-semibold text-blue-500">교통:</span> ${m.transport}</li>
-            <li><span class="font-semibold text-blue-500">치안:</span> ${m.safety}</li>
+            <li><span class="font-semibold text-blue-500">범죄율:</span> ${m.safty}</li>
+            <li><span class="font-semibold text-blue-500">1인가구:</span> ${m.household}</li>
+            <li><span class="font-semibold text-blue-500">교통편의성:</span> ${m.transport}</li>
+            <li><span class="font-semibold text-blue-500">거주외국인:</span> ${m.foreigner}</li>
+            <li><span class="font-semibold text-blue-500">거주청년:</span> ${m.youth}</li>
+            <li><span class="font-semibold text-blue-500">거주노년:</span> ${m.Senior}</li>
           </ul>
-          <p class="mt-2 text-xs text-gray-500 line-clamp-2">${m.description}</p>
+          <p class="mt-2 text-xs text-gray-500 line-clamp-2">${m.description || ''}</p>
         </div>`;
       const infowindow = new kakao.maps.InfoWindow({
         content: infoContent,

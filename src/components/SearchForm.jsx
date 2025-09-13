@@ -10,6 +10,12 @@ const SearchForm = () => {
     setRent,
     facility,
     setFacility,
+    foreigner,
+    setForeigner,
+    youth,
+    setYouth,
+    senior,
+    setSenior,
     address,
     setAddress,
     handleSearch,
@@ -108,30 +114,31 @@ const SearchForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSearch}
-      className="max-w-6xl mt-12 mx-auto flex flex-col gap-10 px-4 w-full"
-    >
-      <section className="bg-white shadow-lg rounded-2xl p-8">
-        <h2 className="mb-6 text-2xl font-extrabold text-gray-900">
+    <div className="max-w-6xl mt-4 mx-auto flex flex-col gap-4 px-4 w-full">
+      <section className="bg-white shadow-lg rounded-2xl p-6">
+        <h2 className="mb-4 text-xl font-extrabold text-gray-900">
           우선순위를 설정하세요
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* 첫 번째 줄 */}
           {/* 범죄율 */}
-          <div className="rounded-2xl border border-gray-100 p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🛡️</span>
-                <span className="font-semibold text-gray-900">치안(안전)</span>
+                <span className="font-semibold text-gray-900">범죄율</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    인구수 대비 범죄율이 낮을 수록 점수가 높아요.
+                  </div>
+                </span>
               </div>
               <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
                 {crime}
               </span>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              숫자가 높을수록 안전을 더 중시
-            </p>
             <div className="mt-4">
               <input
                 type="range"
@@ -150,19 +157,22 @@ const SearchForm = () => {
           </div>
 
           {/* 월세 */}
-          <div className="rounded-2xl border border-gray-100 p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-xl">💸</span>
-                <span className="font-semibold text-gray-900">월세(예산)</span>
+                <span className="text-xl">🏠</span>
+                <span className="font-semibold text-gray-900">1인가구</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    전체 세대 수 대비 1인가구가 많으면 점수가 높아요.
+                  </div>
+                </span>
               </div>
               <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
                 {rent}
               </span>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              숫자가 높을수록 저렴한 곳을 선호
-            </p>
             <div className="mt-4">
               <input
                 type="range"
@@ -181,19 +191,22 @@ const SearchForm = () => {
           </div>
 
           {/* 편의시설 */}
-          <div className="rounded-2xl border border-gray-100 p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-xl">🏪</span>
-                <span className="font-semibold text-gray-900">편의시설</span>
+                <span className="text-xl">🚉</span>
+                <span className="font-semibold text-gray-900">교통편의성</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    점수가 높을수록 대중교통이 활성화 되어있어요.
+                  </div>
+                </span>
               </div>
               <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
                 {facility}
               </span>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              숫자가 높을수록 생활 인프라 중시
-            </p>
             <div className="mt-4">
               <input
                 type="range"
@@ -210,14 +223,119 @@ const SearchForm = () => {
               </div>
             </div>
           </div>
+
+          {/* 두 번째 줄 */}
+          <div className="col-span-1 md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* 거주외국인 */}
+            <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🌍</span>
+                <span className="font-semibold text-gray-900">거주외국인</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    외국인 거주율이 높을 수록 점수가 낮아요.
+                  </div>
+                </span>
+              </div>
+                <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
+                  {foreigner}
+                </span>
+              </div>
+              <div className="mt-4">
+                <input
+                  type="range"
+                  min={0}
+                  max={10}
+                  value={foreigner}
+                  onChange={(e) => setForeigner(+e.target.value)}
+                  className="w-full h-2 bg-gradient-to-r from-[#CDEFFC] via-[#8FDDF8] to-[#00AEEF] rounded-full appearance-none accent-[#00AEEF]"
+                />
+                <div className="mt-2 flex justify-between text-[11px] text-gray-400">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 거주청년 */}
+            <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">👨‍💼</span>
+                <span className="font-semibold text-gray-900">거주청년</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    점수가 높을수록 청년 거주율이 높아요.
+                  </div>
+                </span>
+              </div>
+                <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
+                  {youth}
+                </span>
+              </div>
+              <div className="mt-4">
+                <input
+                  type="range"
+                  min={0}
+                  max={10}
+                  value={youth}
+                  onChange={(e) => setYouth(+e.target.value)}
+                  className="w-full h-2 bg-gradient-to-r from-[#CDEFFC] via-[#8FDDF8] to-[#00AEEF] rounded-full appearance-none accent-[#00AEEF]"
+                />
+                <div className="mt-2 flex justify-between text-[11px] text-gray-400">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 거주노년 */}
+            <div className="rounded-2xl border border-gray-100 p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">👴</span>
+                <span className="font-semibold text-gray-900">거주노년</span>
+                <span className="text-sm cursor-help relative group">
+                  💡
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                    점수가 높을수록 노년 거주율이 높아요.
+                  </div>
+                </span>
+              </div>
+                <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#E6F7FD] text-[#007da0]">
+                  {senior}
+                </span>
+              </div>
+              <div className="mt-4">
+                <input
+                  type="range"
+                  min={0}
+                  max={10}
+                  value={senior}
+                  onChange={(e) => setSenior(+e.target.value)}
+                  className="w-full h-2 bg-gradient-to-r from-[#CDEFFC] via-[#8FDDF8] to-[#00AEEF] rounded-full appearance-none accent-[#00AEEF]"
+                />
+                <div className="mt-2 flex justify-between text-[11px] text-gray-400">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <section
         ref={containerRef}
-        className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 relative"
+        className="bg-white shadow-lg rounded-xl p-4 flex flex-col md:flex-row items-center gap-4 relative"
       >
-        <h3 className="w-full md:w-auto text-lg font-semibold text-gray-800">
+        <h3 className="w-full md:w-auto text-base font-semibold text-gray-800">
           자주 가는 장소
         </h3>
         <input
@@ -226,7 +344,7 @@ const SearchForm = () => {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           onKeyDown={onKeyDown}
-          className="flex-1 py-3 px-5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00AEEF]"
+          className="flex-1 py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00AEEF]"
         />
 
         {isOpen && suggestions.length > 0 && (
@@ -251,14 +369,7 @@ const SearchForm = () => {
           </div>
         )}
       </section>
-
-      <button
-        type="submit"
-        className="self-end py-3 px-10 bg-[#00AEEF] text-white rounded-full text-lg font-semibold hover:bg-[#008bb5] transition-colors shadow-md"
-      >
-        제출하기
-      </button>
-    </form>
+    </div>
   );
 };
 

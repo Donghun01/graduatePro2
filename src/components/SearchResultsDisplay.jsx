@@ -27,8 +27,8 @@ const SearchResultsDisplay = () => {
   const defaultZoom = 9;
 
   return (
-    <div className="w-full mt-10">
-      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    <div className="w-full mt-4">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
         추천 동네 결과
       </h2>
 
@@ -41,7 +41,7 @@ const SearchResultsDisplay = () => {
           죄송해요, 조건에 맞는 지역을 찾을 수 없습니다.
         </p>
       ) : (
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="col-span-1 lg:col-span-2">
             <MapSection
               center={defaultCenter}
@@ -58,7 +58,7 @@ const SearchResultsDisplay = () => {
       )}
 
       {totalPages > 1 && !isLoading && searchResults.length > 0 && (
-        <div className="flex justify-center items-center mt-10 space-x-2">
+        <div className="flex justify-center items-center mt-6 space-x-2">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
